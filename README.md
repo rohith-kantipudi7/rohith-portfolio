@@ -1,61 +1,67 @@
-# 3D AI Portfolio
+# Rohith Kantipudi
 
-A full-bleed 3D portfolio for an AI researcher / engineer, built with **React**, **Vite**, **React Three Fiber**
-and **postprocessing** (bloom). A fixed WebGL stage shows a different meshed set-piece for each section (an
-iridescent shader core, a transformer stack, an agent hub, a GPU cluster, a Bloch sphere, Earth with cloud
-regions, a commit graph, an iridescent knot), the research chapters are pinned while the stage morphs, and the
-flagship systems scroll horizontally with a live 3D preview inside every card.
+**AI Researcher · AI Engineer · Forward Deployed · Open Source**
 
-## Quick start
+Foundation Models • AI Systems • Agentic AI • AI Infrastructure • Quantum ML • Multi-cloud
 
-```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build    # production build → dist/
-npm run preview  # preview the production build
-```
+🌐 Live: https://rohith-kantipudi7.github.io/rohith-portfolio/
+✉️ rohith.kantipudi4@gmail.com
 
-## Fill in your details (the only required step)
+---
 
-Edit **`src/data/profile.js`**:
+## About
 
-- `name` — your name (also drives the giant hero title, nav and page title)
-- `email` — your email
-- `cv` — link to your CV (drop `cv.pdf` into `public/` and use `/cv.pdf`, or any URL)
-- optional: `location`, `socials` (empty links are hidden)
+I build the layer underneath AI: models, agents and the infrastructure that runs them, shipped inside the
+customer’s cloud.
 
-## Change the copy
+Most AI work is assembled on top of someone else’s model. I work on how models are trained and post-trained,
+how agents stay reliable, and the infrastructure that serves them at scale. Then I take it where it has to
+survive: inside the customer’s environment, on AWS, Azure, GCP or an air-gapped rack, with evals, security and
+cost budgets attached.
 
-Everything else the site says lives in **`src/data/content.js`**: hero, the manifesto (wrap words in
-`**stars**` to highlight them), the five pinned chapters, the multi-cloud matrix, the six flagship systems
-(add `code` / `demo` / `paper` URLs to show links), open-source areas and the contact text.
+## What I work on
 
-## Structure
+| | Area | Focus |
+|---|---|---|
+| 01 | **Foundation models** | Dense & MoE transformers, state-space hybrids, long context. SFT, DPO and GRPO post-training. Quantisation, distillation and speculative decoding. |
+| 02 | **Agentic AI** | Typed tool contracts, MCP-native integrations, durable execution. Grounded memory and retrieval. Tracing, replayable runs, human-approval and evaluation gates. |
+| 03 | **AI infrastructure** | Elastic, fault-tolerant multi-node training. Continuous batching, paged KV-cache and tensor parallelism on vLLM and TensorRT-LLM. Latency, quality and GPU cost in one trace. |
+| 04 | **Quantum** | Variational circuits (VQE, QAOA, quantum kernels), quantum layers inside PyTorch, error mitigation on simulators and cloud QPUs. |
+| 05 | **Forward deployed** | Embed → define the metric → ship a thin slice → harden → hand off. Deployed into the customer’s VPC, on-prem rack or air-gapped site. |
 
-```
-src/
-  data/profile.js      ← name / email / CV (edit this)
-  data/content.js      ← all copy
-  three/Scene.jsx      ← fixed WebGL stage: camera rig, lights, dust, bloom, stage pieces
-  three/Preview.jsx    ← small per-card canvas for the project gallery
-  three/pieces/        ← the 3D set-pieces (core, network, agents, cluster, quantum, globe, gates, upstream, knot)
-  three/land.js        ← Natural Earth land mask for the globe
-  ui/                  ← one component per section
-  lib/                 ← Lenis smooth scroll, shared scroll state, pin progress, hover tilt
-```
+## Flagship systems
 
-Sections: Hero · Band · Manifesto · Chapters (pinned: Models, Agents, Infra, Quantum, Forward deployed) ·
-Cloud matrix · Systems (horizontal gallery) · Open source · Contact.
+| System | What it is |
+|---|---|
+| **FORGE** | A sovereign foundation-model factory: pretraining → post-training → evaluation in one config, reproducible on AWS, Azure, GCP or bare metal. |
+| **CONDUCTOR** | A durable runtime for tool-using agents: every step persisted, traced and replayable, with approval and evaluation gates. |
+| **MERIDIAN** | A multi-cloud inference mesh: one OpenAI-compatible endpoint over GPU pools on AWS, Azure, GCP and on-prem, routed by latency, cost and KV-cache locality. |
+| **VERDICT** | Continuous evaluation for models and agents: calibrated judges, contamination checks and regression gates in CI. |
+| **ENTANGLE** | A hybrid quantum–classical ML lab: variational circuits as PyTorch layers, benchmarked against classical baselines on simulators and cloud QPUs. |
+| **FIELDKIT** | Prototype to production in a customer’s VPC: Terraform per cloud, an air-gapped bundle, zero-trust defaults, runbooks and dashboards. |
 
-A section picks the stage piece behind it with `data-stage="<piece key>"` (and `data-side="1|-1"`).
-The chapters rewrite their own `data-stage` as you scroll through them.
+## One architecture. Any cloud.
 
-## Theme
+The same agent and inference stack maps onto AWS, Azure, GCP or an air-gapped cluster. Only the adapters
+change: one artifact (OCI + Helm), one control plane (Terraform per cloud), one model interface
+(OpenAI-compatible gateway over vLLM, Bedrock, Azure OpenAI or Vertex), one telemetry format (OpenTelemetry).
 
-Colours, fonts and spacing are CSS variables at the top of `src/index.css`. Fonts: Syne (display), Manrope
-(body), JetBrains Mono (labels). The 3D palette lives in `src/three/pieces/shared.jsx`.
+## Stack
 
-## Deploy
+`PyTorch` `JAX` `FSDP` `Megatron` `Hugging Face` `RLHF / DPO / GRPO` `MCP` `LangGraph` `Temporal` `OpenTelemetry`
+`vLLM` `TensorRT-LLM` `Triton` `Ray` `Slurm` `Kubernetes` `Terraform` `Helm` `AWS` `Azure` `GCP`
+`Qiskit` `PennyLane` `Cirq` `Amazon Braket` `Azure Quantum` `Python` `Go` `Rust` `TypeScript` `CUDA`
 
-`dist/` is a static site. Deploy to Vercel, Netlify, Cloudflare Pages or GitHub Pages with build command
-`npm run build` and output directory `dist`.
+## Open source
+
+Building in the open, upstream first: training and model tooling, agent frameworks and MCP servers, serving
+engines and Kubernetes operators, hybrid QML examples and benchmark reproductions.
+
+## Contact
+
+Open to research collaborations, AI engineering and forward-deployed roles, and open-source work.
+**rohith.kantipudi4@gmail.com**
+
+---
+
+<sub>This site: React · Vite · React Three Fiber. `npm install && npm run dev` to run locally.</sub>
