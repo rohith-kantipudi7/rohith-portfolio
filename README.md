@@ -1,44 +1,61 @@
-# Rohith Kantipudi — 3D AI Portfolio
+# 3D AI Portfolio
 
-A futuristic, AI-themed portfolio built with **React**, **Vite**, and **React Three Fiber** (Three.js). Features an interactive 3D background — a glowing particle field, an animated neural network, floating morphing geometry, and a mouse/scroll-reactive camera — over glassmorphism UI.
+A full-bleed 3D portfolio for an AI researcher / engineer, built with **React**, **Vite**, **React Three Fiber**
+and **postprocessing** (bloom). A fixed WebGL stage shows a different meshed set-piece for each section (an
+iridescent shader core, a transformer stack, an agent hub, a GPU cluster, a Bloch sphere, Earth with cloud
+regions, a commit graph, an iridescent knot), the research chapters are pinned while the stage morphs, and the
+flagship systems scroll horizontally with a live 3D preview inside every card.
 
 ## Quick start
 
 ```bash
-npm install      # install dependencies (already done)
-npm run dev      # start dev server → http://localhost:5173
+npm install
+npm run dev      # http://localhost:5173
 npm run build    # production build → dist/
 npm run preview  # preview the production build
 ```
 
-## Customize (the important part)
+## Fill in your details (the only required step)
 
-**All your content lives in one file:** `src/data/content.js`
+Edit **`src/data/profile.js`**:
 
-Edit it to change:
-- `profile` — your name, role, taglines, email, resume link, social links
-- `about` — your bio paragraphs and the stat tiles
-- `skills` — skill groups and the technologies in each
-- `projects` — your featured projects (title, blurb, tags, links)
-- `experience` — your work timeline
-- `contact` — the contact section text
+- `name` — your name (also drives the giant hero title, nav and page title)
+- `email` — your email
+- `cv` — link to your CV (drop `cv.pdf` into `public/` and use `/cv.pdf`, or any URL)
+- optional: `location`, `socials` (empty links are hidden)
 
-No component code needs to change — just edit that file.
+## Change the copy
 
-### Theme colors
-Tweak the neon palette in `src/index.css` under `:root` (`--cyan`, `--purple`, `--grad`, etc.).
+Everything else the site says lives in **`src/data/content.js`**: hero, the manifesto (wrap words in
+`**stars**` to highlight them), the five pinned chapters, the multi-cloud matrix, the six flagship systems
+(add `code` / `demo` / `paper` URLs to show links), open-source areas and the contact text.
 
-### 3D scene
-The background lives in `src/components/three/`:
-- `ParticleField.jsx` — the drifting star cloud
-- `NeuralNetwork.jsx` — glowing connected nodes
-- `FloatingShapes.jsx` — morphing wireframe solids
-- `Scene.jsx` — canvas setup + mouse/scroll camera rig
+## Structure
+
+```
+src/
+  data/profile.js      ← name / email / CV (edit this)
+  data/content.js      ← all copy
+  three/Scene.jsx      ← fixed WebGL stage: camera rig, lights, dust, bloom, stage pieces
+  three/Preview.jsx    ← small per-card canvas for the project gallery
+  three/pieces/        ← the 3D set-pieces (core, network, agents, cluster, quantum, globe, gates, upstream, knot)
+  three/land.js        ← Natural Earth land mask for the globe
+  ui/                  ← one component per section
+  lib/                 ← Lenis smooth scroll, shared scroll state, pin progress, hover tilt
+```
+
+Sections: Hero · Band · Manifesto · Chapters (pinned: Models, Agents, Infra, Quantum, Forward deployed) ·
+Cloud matrix · Systems (horizontal gallery) · Open source · Contact.
+
+A section picks the stage piece behind it with `data-stage="<piece key>"` (and `data-side="1|-1"`).
+The chapters rewrite their own `data-stage` as you scroll through them.
+
+## Theme
+
+Colours, fonts and spacing are CSS variables at the top of `src/index.css`. Fonts: Syne (display), Manrope
+(body), JetBrains Mono (labels). The 3D palette lives in `src/three/pieces/shared.jsx`.
 
 ## Deploy
 
-The `dist/` folder is a static site — deploy it to **Vercel**, **Netlify**, **GitHub Pages**, or **Cloudflare Pages**. For Vercel/Netlify: build command `npm run build`, output directory `dist`.
-
-## Tech stack
-
-React 18 · Vite · React Three Fiber · @react-three/drei · Three.js · Framer Motion
+`dist/` is a static site. Deploy to Vercel, Netlify, Cloudflare Pages or GitHub Pages with build command
+`npm run build` and output directory `dist`.

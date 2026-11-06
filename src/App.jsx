@@ -1,26 +1,29 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { useSmoothScroll } from './lib/useSmoothScroll'
+import { useTilt } from './lib/useTilt'
+import { profile } from './data/profile'
 import ErrorBoundary from './ui/ErrorBoundary'
 import Loader from './ui/Loader'
 import Cursor from './ui/Cursor'
 import Nav from './ui/Nav'
 import Hero from './ui/Hero'
-import Marquee from './ui/Marquee'
-import Profile from './ui/Profile'
-import Chapter from './ui/Chapter'
-import Deployed from './ui/Deployed'
-import Lab from './ui/Lab'
-import Projects from './ui/Projects'
-import MultiCloud from './ui/MultiCloud'
+import Band from './ui/Band'
+import Manifesto from './ui/Manifesto'
+import Chapters from './ui/Chapters'
+import Cloud from './ui/Cloud'
+import Systems from './ui/Systems'
 import OpenSource from './ui/OpenSource'
-import Hud from './ui/Hud'
 import Contact from './ui/Contact'
-import { chapters } from './data/content'
 
 const Scene = lazy(() => import('./three/Scene'))
 
 export default function App() {
   useSmoothScroll()
+  useTilt('.tilt')
+
+  useEffect(() => {
+    document.title = `${profile.name} — AI Researcher & AI Engineer`
+  }, [])
 
   return (
     <>
@@ -35,18 +38,13 @@ export default function App() {
       <div className="grain" aria-hidden="true" />
 
       <Nav />
-      <Hud />
       <main>
         <Hero />
-        <Marquee />
-        <Profile />
-        {chapters.map((c) => (
-          <Chapter key={c.id} c={c} />
-        ))}
-        <Deployed />
-        <MultiCloud />
-        <Lab />
-        <Projects />
+        <Band />
+        <Manifesto />
+        <Chapters />
+        <Cloud />
+        <Systems />
         <OpenSource />
         <Contact />
       </main>

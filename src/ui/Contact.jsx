@@ -1,41 +1,42 @@
 import Reveal from './Reveal'
-import { contact, profile } from '../data/content'
+import { profile } from '../data/profile'
+import { contact, roleLine } from '../data/content'
 
 export default function Contact() {
-  const socials = [
-    ['GitHub', profile.socials.github],
-    ['LinkedIn', profile.socials.linkedin],
-    ['X', profile.socials.x],
-  ].filter(([, url]) => url)
+  const socials = [['GitHub', profile.socials.github], ['LinkedIn', profile.socials.linkedin], ['X', profile.socials.x], ['Scholar', profile.socials.scholar]].filter(([, u]) => u)
 
   return (
-    <section id="contact" className="contact" data-stage="6">
-      <div className="wrap contact__inner">
-        <Reveal>
-          <p className="eyebrow">
-            <b>10</b> Contact
-          </p>
-          <h2 className="contact__title">{contact.title}</h2>
-          <p className="lead">{contact.lead}</p>
-          <a className="contact__mail" href={`mailto:${profile.email}`} data-cursor>
-            {profile.email}
-            <span>↗</span>
-          </a>
-          {socials.length > 0 && (
-            <div className="contact__social">
-              {socials.map(([label, url]) => (
-                <a key={label} href={url} target="_blank" rel="noreferrer">
-                  {label} ↗
-                </a>
-              ))}
+    <section id="contact" className="contact">
+      <div className="split contact__inner" data-stage="knot" data-side="1">
+        <div className="wrap">
+          <Reveal className="split__col">
+            <p className="kicker">{contact.kicker}</p>
+            <h2 className="contact__title">{contact.title}</h2>
+            <p className="lead">{contact.lead}</p>
+            <div className="contact__links">
+              <a className="contact__mail" href={`mailto:${profile.email}`} data-cursor>
+                {profile.email} <span>↗</span>
+              </a>
+              <a className="btn btn--solid" href={profile.cv} target="_blank" rel="noreferrer" data-cursor>
+                Download CV <span>↓</span>
+              </a>
             </div>
-          )}
-          <p className="contact__oss">{contact.oss}</p>
-        </Reveal>
+            {socials.length > 0 && (
+              <div className="contact__social mono">
+                {socials.map(([label, url]) => (
+                  <a key={label} href={url} target="_blank" rel="noreferrer">
+                    {label} ↗
+                  </a>
+                ))}
+              </div>
+            )}
+          </Reveal>
+        </div>
       </div>
-      <footer className="footer">
+      <footer className="footer mono">
         <span>© {new Date().getFullYear()} {profile.name}</span>
-        <span>{profile.roles}</span>
+        <span>{roleLine}</span>
+        {profile.location && <span>{profile.location}</span>}
       </footer>
     </section>
   )

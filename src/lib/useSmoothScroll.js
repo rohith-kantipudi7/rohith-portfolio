@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import Lenis from 'lenis'
-import { scrollState } from './scrollState'
+import { scrollState, pointerState } from './scrollState'
 
 let lenis = null
 
@@ -13,46 +13,58 @@ export function scrollToId(id) {
 }
 
 /**
- * Lenis smooth scrolling + publishes scroll progress and the "active stage"
- * (the [data-stage] section crossing the middle of the viewport) to scrollState.
+ * Lenis smooth scrolling + publishes which [data-stage] section is crossing the middle of
+ * the viewport, so the 3D stage can show that section's piece. Sections may rewrite their
+ * own data-stage while pinned (the chapters do), so this is re-read every frame.
  */
 export function useSmoothScroll() {
   useEffect(() => {
     lenis = new Lenis({ lerp: 0.09, smoothWheel: true })
 
-    let stageEls = []
+    let els = []
     const refresh = () => {
-      stageEls = Array.from(document.querySelectorAll('[data-stage]'))
+      els = Array.from(document.querySelectorAll('[data-stage]'))
     }
     const detect = () => {
       const mid = window.innerHeight * 0.5
-      for (const el of stageEls) {
+      let found = null
+      for (const el of els) {
         const r = el.getBoundingClientRect()
         if (r.top <= mid && r.bottom > mid) {
-          scrollState.stage = Number(el.dataset.stage)
-          return
+          found = el
+          break
         }
       }
+      scrollState.stage = found ? found.dataset.stage : 'none'
+      scrollState.side = found && found.dataset.side ? Number(found.dataset.side) : 1
     }
 
     lenis.on('scroll', ({ scroll, limit, velocity }) => {
       scrollState.y = scroll
       scrollState.progress = limit > 0 ? scroll / limit : 0
       scrollState.vel = velocity
-      detect()
     })
+
+    const onMove = (e) => {
+      pointerState.x = (e.clientX / window.innerWidth) * 2 - 1
+      pointerState.y = -((e.clientY / window.innerHeight) * 2 - 1)
+      pointerState.active = true
+    }
+    const onLeave = () => {
+      pointerState.active = false
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    document.addEventListener('pointerleave', onLeave)
 
     refresh()
     detect()
-    const ro = new ResizeObserver(() => {
-      refresh()
-      detect()
-    })
+    const ro = new ResizeObserver(refresh)
     ro.observe(document.body)
 
     let raf
     const loop = (t) => {
       lenis.raf(t)
+      detect()
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
@@ -60,8 +72,18 @@ export function useSmoothScroll() {
     return () => {
       cancelAnimationFrame(raf)
       ro.disconnect()
+      window.removeEventListener('pointermove', onMove)
+      document.removeEventListener('pointerleave', onLeave)
       lenis.destroy()
       lenis = null
     }
   }, [])
+}
+
+/** Progress (0..1) of a pinned section: how far its sticky child has been scrolled through. */
+export function pinProgress(el) {
+  const r = el.getBoundingClientRect()
+  const range = r.height - window.innerHeight
+  if (range <= 0) return 0
+  return Math.min(1, Math.max(0, -r.top / range))
 }

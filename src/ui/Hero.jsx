@@ -1,74 +1,65 @@
-import { useEffect, useRef } from 'react'
 import { scrollToId } from '../lib/useSmoothScroll'
-import { profile, headline } from '../data/content'
+import { profile } from '../data/profile'
+import { hero, roleLine } from '../data/content'
 
+/** Full-bleed hero: portrait and a short lead on the left, the 3D core on the right, the name across the bottom. */
 export default function Hero() {
-  const portrait = useRef(null)
-
-  // Portrait leans toward the pointer for a subtle 3D parallax.
-  useEffect(() => {
-    const el = portrait.current
-    if (!el || !window.matchMedia('(pointer: fine)').matches) return
-    let tx = 0, ty = 0, cx = 0, cy = 0, raf
-    const onMove = (e) => {
-      tx = (e.clientX / window.innerWidth - 0.5) * 2
-      ty = (e.clientY / window.innerHeight - 0.5) * 2
-    }
-    const loop = () => {
-      cx += (tx - cx) * 0.06
-      cy += (ty - cy) * 0.06
-      el.style.transform = `perspective(1100px) rotateY(${cx * 5}deg) rotateX(${-cy * 3}deg) translate3d(${cx * -10}px, ${cy * -6}px, 0)`
-      raf = requestAnimationFrame(loop)
-    }
-    window.addEventListener('pointermove', onMove, { passive: true })
-    raf = requestAnimationFrame(loop)
-    return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('pointermove', onMove)
-    }
-  }, [])
+  const words = profile.name.trim().split(/\s+/)
+  // Size the display name so the longest word always fits comfortably.
+  const longest = Math.max(...words.map((w) => w.length), 4)
+  const nameSize = `clamp(2.4rem, calc(70vw / ${longest} * 1.02), 8.5rem)`
   return (
-    <section id="hero" className="hero" data-stage="0">
-      <div className="hero__glow" aria-hidden="true" />
-
-      <div className="hero__portrait" aria-hidden="true">
-        <img ref={portrait} src="/me.png" alt="" draggable="false" />
+    <section id="hero" className="hero" data-stage="core" data-side="1">
+      <div className="hero__top">
+        <p className="chip chip--live">
+          <i /> {hero.status}
+        </p>
+        <p className="mono hero__role">{roleLine}</p>
       </div>
 
-      <div className="wrap hero__inner">
-        <p className="eyebrow hero__eyebrow">
-          <b>●</b> {profile.roles}
-        </p>
+      <div className="hero__mid">
+        <div className="hero__text">
+          <div className="hero__who">
+            {profile.photo && (
+              <span className="hero__avatar">
+                <img src={profile.photo} alt={profile.name} draggable="false" />
+              </span>
+            )}
+            <div>
+              <strong>{profile.name}</strong>
+              <span className="mono">{hero.title}</span>
+            </div>
+          </div>
+          <p className="hero__lead">{hero.lead}</p>
+          <div className="hero__cta">
+            <button className="btn btn--solid" onClick={() => scrollToId('systems')} data-cursor>
+              See the systems <span>↓</span>
+            </button>
+            <a className="btn" href={profile.cv} target="_blank" rel="noreferrer" data-cursor>
+              Download CV <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-        <h1 className="hero__title" aria-label={headline.join(' ')}>
-          {headline.map((line, i) => (
-            <span key={line} className="hero__line" aria-hidden="true">
-              <span style={{ animationDelay: `${1.45 + i * 0.12}s` }}>{line}</span>
+      <div className="hero__bottom">
+        <h1 className="hero__name" aria-label={profile.name} style={{ fontSize: nameSize }}>
+          {words.map((w, i) => (
+            <span key={i} className="hero__word" style={{ animationDelay: `${1.3 + i * 0.1}s` }}>
+              {w}
             </span>
           ))}
         </h1>
-
-        <p className="hero__lead">
-          I’m <strong>{profile.name}</strong>. I research and build the <strong>core of AI</strong> — models, agents and
-          the <strong>infrastructure</strong> underneath — and take them into <strong>production</strong>, inside real
-          customer environments, on <strong>any cloud</strong>.
-        </p>
-
-        <div className="hero__cta">
-          <button className="pill" onClick={() => scrollToId('projects')} data-cursor>
-            <i>+</i> See the work
-          </button>
-          <button className="pill pill--ghost" onClick={() => scrollToId('contact')} data-cursor>
-            Get in touch
-          </button>
+        <div className="hero__sub">
+          <ul className="hero__focus" aria-label="Focus areas">
+            {hero.focus.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+          <p className="mono hero__scroll" aria-hidden="true">
+            Scroll <i />
+          </p>
         </div>
-
-        <p className="hero__tagline">{profile.tagline}</p>
-      </div>
-
-      <div className="hero__scroll" aria-hidden="true">
-        <span>Scroll</span>
-        <i />
       </div>
     </section>
   )

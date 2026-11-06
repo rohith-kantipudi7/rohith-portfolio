@@ -1,18 +1,13 @@
 import { useEffect, useState } from 'react'
 import { scrollToId } from '../lib/useSmoothScroll'
-import { profile } from '../data/content'
+import { profile } from '../data/profile'
 
 const LINKS = [
   { id: 'about', label: 'Profile' },
-  { id: 'models', label: 'Models' },
-  { id: 'agents', label: 'Agents' },
-  { id: 'infra', label: 'Infra' },
-  { id: 'deployed', label: 'Field' },
-  { id: 'multicloud', label: 'Cloud' },
-  { id: 'lab', label: 'Lab' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'opensource', label: 'OSS' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'research', label: 'Research' },
+  { id: 'cloud', label: 'Cloud' },
+  { id: 'systems', label: 'Systems' },
+  { id: 'opensource', label: 'Open source' },
 ]
 
 export default function Nav() {
@@ -21,7 +16,7 @@ export default function Nav() {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    const ids = ['hero', ...LINKS.map((l) => l.id)]
+    const ids = ['hero', ...LINKS.map((l) => l.id), 'contact']
     const onScroll = () => {
       const mid = window.innerHeight * 0.4
       let cur = ''
@@ -47,9 +42,7 @@ export default function Nav() {
     <header className="nav">
       <div className="nav__bar" style={{ transform: `scaleX(${progress})` }} />
       <button className="nav__logo" onClick={() => go('hero')} aria-label="Back to top">
-        {profile.first[0]}
-        {profile.last[0]}
-        <span>.</span>
+        {profile.name}
       </button>
 
       <nav className={`nav__links ${open ? 'is-open' : ''}`}>
@@ -58,12 +51,23 @@ export default function Nav() {
             {l.label}
           </button>
         ))}
+        <a className="nav__cv nav__cv--mobile" href={profile.cv} target="_blank" rel="noreferrer">
+          CV ↗
+        </a>
       </nav>
 
-      <button className="nav__burger" onClick={() => setOpen((o) => !o)} aria-label="Menu" aria-expanded={open}>
-        <span />
-        <span />
-      </button>
+      <div className="nav__right">
+        <a className="nav__cv mono" href={profile.cv} target="_blank" rel="noreferrer">
+          CV ↗
+        </a>
+        <button className="btn btn--solid btn--sm" onClick={() => go('contact')} data-cursor>
+          Let’s talk
+        </button>
+        <button className="nav__burger" onClick={() => setOpen((o) => !o)} aria-label="Menu" aria-expanded={open}>
+          <span />
+          <span />
+        </button>
+      </div>
     </header>
   )
 }
