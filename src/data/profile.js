@@ -10,7 +10,7 @@ export const profile = {
   cv: '#',                           // TODO: link to your CV (e.g. '/cv.pdf' in /public, or a Drive/Notion URL)
 
   // --- optional -------------------------------------------------------
-  photo: '/me.png',                  // hero portrait in /public (set to '' to hide)
+  photo: 'me.png',                   // hero portrait in /public (relative path; set to '' to hide)
   location: '',                    // optional, e.g. 'Hyderabad, IN' (shown in the footer when set)
   socials: {
     github: '',                      // https://github.com/<you>
